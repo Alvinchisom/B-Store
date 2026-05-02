@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:b_store/pages/login.dart';
 import 'package:b_store/pages/detail_page.dart';
 import 'package:b_store/pages/home.dart';
+import 'package:b_store/pages/signup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -33,11 +35,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: DetailPage(
-        image: "image/black-man-brown-jacket-pink-background-studio-shot.jpg",
-        name: "T-Shirt",
-        price: "\$100",
-      ),
+      home: Login(),
     );
   }
 }

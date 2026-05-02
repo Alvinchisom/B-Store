@@ -5,6 +5,14 @@ class AppWidget {
     return TextStyle(color: color, fontSize: size, fontWeight: FontWeight.bold);
   }
 
+  static TextStyle semiBoldTextstyle(double size, Color color) {
+    return TextStyle(color: color, fontSize: size, fontWeight: FontWeight.w500);
+  }
+
+  static TextStyle lightTextstyle(double size, Color color) {
+    return TextStyle(color: color, fontSize: size, fontWeight: FontWeight.w400);
+  }
+
   static Widget categoryItem(String imagePath, String name) {
     return Container(
       margin: EdgeInsets.only(right: 20.0),

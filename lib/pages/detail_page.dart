@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:b_store/widget/support_widget.dart';
+import 'package:b_store/pages/home.dart';
 
 class DetailPage extends StatefulWidget {
   final String image, name, price;
@@ -24,34 +25,39 @@ class _DetailPageState extends State<DetailPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
-          padding: EdgeInsets.only(top: 50.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Stack(
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(left: 20.0),
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Icon(
-                        Icons.arrow_back_ios_new_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
+                  Image.asset(
+                    widget.image,
+                    height: MediaQuery.of(context).size.height / 1.5,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
                   ),
-                  Center(
-                    child: Image.asset(
-                      widget.image,
-                      height: MediaQuery.of(context).size.height / 1.7,
-                      fit: BoxFit.cover,
+                  Positioned(
+                    top: 50,
+                    left: 20,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Home()),
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black12),
+                          borderRadius: BorderRadius.circular(30),
+                          color: Color.fromARGB(255, 240, 234, 234),
+                        ),
+                        child: Icon(
+                          Icons.arrow_back_ios_new_outlined,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
                   ),
                 ],
