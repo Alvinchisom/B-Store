@@ -3,8 +3,11 @@ import 'package:b_store/pages/login.dart';
 import 'package:b_store/pages/detail_page.dart';
 import 'package:b_store/pages/home.dart';
 import 'package:b_store/pages/signup.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
