@@ -110,7 +110,7 @@ class _DetailPageState extends State<DetailPage> {
                       "Select Size",
                       style: AppWidget.boldTextstyle(18, Colors.black),
                     ),
-                    Container(
+                    SizedBox(
                       height: 50,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
@@ -178,7 +178,7 @@ class _DetailPageState extends State<DetailPage> {
                       "Select Color",
                       style: AppWidget.boldTextstyle(18, Colors.black),
                     ),
-                    Container(
+                    SizedBox(
                       height: 50,
                       child: ListView(
                         scrollDirection: Axis.horizontal,

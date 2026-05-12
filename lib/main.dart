@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:b_store/pages/login.dart';
-import 'package:b_store/pages/detail_page.dart';
-import 'package:b_store/pages/home.dart';
-import 'package:b_store/pages/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:b_store/Admin/add_product.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +36,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Login(),
+      home: AddProduct(),
     );
   }
 }

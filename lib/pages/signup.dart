@@ -6,6 +6,8 @@ import 'package:b_store/pages/home.dart';
 import 'package:random_string/random_string.dart';
 import 'package:b_store/services/database.dart';
 
+import 'package:b_store/services/shared_pref.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
@@ -16,15 +18,15 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String name = "", email = "", password = "";
 
-  TextEditingController namecontroller = new TextEditingController();
-  TextEditingController mailcontroller = new TextEditingController();
-  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController namecontroller = TextEditingController();
+  TextEditingController mailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
 
   bool isLoading = false;
 
-  registration() async {
+  Future<void> registration() async {
     if (password != "" && name != "" && email != "") {
       setState(() {
         isLoading = true;
@@ -34,7 +36,7 @@ class _SignUpState extends State<SignUp> {
             .createUserWithEmailAndPassword(email: email, password: password);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            backgroundColor: Colors.redAccent,
+            backgroundColor: const Color.fromARGB(255, 19, 220, 21),
             content: Text(
               "Registered Successfully",
               style: TextStyle(fontSize: 20.0),
@@ -43,14 +45,20 @@ class _SignUpState extends State<SignUp> {
         );
 
         String Id = randomAlphaNumeric(10);
+        await SharedPreferenceHelper().saveUserId(Id);
+        await SharedPreferenceHelper().saveUserEmail(mailcontroller.text);
+        await SharedPreferenceHelper().saveUserName(namecontroller.text);
+        await SharedPreferenceHelper().saveUserWallet("0");
+
         Map<String, dynamic> addUserInfo = {
           "Name": namecontroller.text,
           "Email": mailcontroller.text,
           "Id": Id,
+          "Wallet": "0",
         };
         await DatabaseMethods().addUserDetails(addUserInfo, Id);
 
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => Home()),
         );
