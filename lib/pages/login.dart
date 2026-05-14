@@ -14,13 +14,13 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   String email = "", password = "";
 
-  TextEditingController mailcontroller = new TextEditingController();
-  TextEditingController passwordcontroller = new TextEditingController();
+  TextEditingController mailcontroller = TextEditingController();
+  TextEditingController passwordcontroller = TextEditingController();
 
   final _formkey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  userLogin() async {
+  Future<void> userLogin() async {
     setState(() {
       isLoading = true;
     });

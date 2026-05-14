@@ -15,14 +15,14 @@ class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: 150,
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 51, 30, 30),
+                color: Color.fromARGB(255, 116, 95, 82),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(80),
                   bottomRight: Radius.circular(80),
@@ -63,7 +63,7 @@ class _AddProductState extends State<AddProduct> {
               padding: EdgeInsets.only(left: 20),
               margin: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 90, 11, 5)),
+                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
@@ -87,7 +87,7 @@ class _AddProductState extends State<AddProduct> {
               padding: EdgeInsets.only(left: 20),
               margin: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 90, 11, 5)),
+                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
@@ -111,7 +111,7 @@ class _AddProductState extends State<AddProduct> {
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               margin: EdgeInsets.only(left: 20.0, right: 20.0),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 90, 11, 5)),
+                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: DropdownButtonHideUnderline(
@@ -158,14 +158,32 @@ class _AddProductState extends State<AddProduct> {
               padding: EdgeInsets.only(left: 20),
               margin: EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 90, 11, 5)),
-                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
+                maxLines: 5,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: "Enter product details",
                   hintStyle: AppWidget.semiBoldTextstyle(16, Colors.black54),
+                ),
+              ),
+            ),
+            SizedBox(height: 40),
+            Center(
+              child: Container(
+                width: 200,
+                padding: EdgeInsets.symmetric(vertical: 10),
+                margin: EdgeInsets.only(left: 100, right: 100),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Color.fromARGB(255, 116, 95, 82),
+                ),
+                child: Text(
+                  "Add",
+                  textAlign: TextAlign.center,
+                  style: AppWidget.boldTextstyle(20, Colors.white),
                 ),
               ),
             ),
