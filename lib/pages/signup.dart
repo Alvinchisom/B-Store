@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:b_store/widget/support_widget.dart';
 import 'package:b_store/pages/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:b_store/pages/home.dart';
 import 'package:random_string/random_string.dart';
 import 'package:b_store/services/database.dart';
 
 import 'package:b_store/services/shared_pref.dart';
+import 'package:b_store/pages/bottom_nav.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -60,7 +60,7 @@ class _SignUpState extends State<SignUp> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Home()),
+          MaterialPageRoute(builder: (context) => BottomNav()),
         );
       } on FirebaseAuthException catch (e) {
         if (e.code == 'weak-password') {
