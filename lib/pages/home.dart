@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:b_store/widget/support_widget.dart';
 import 'package:b_store/pages/detail_page.dart';
+import 'package:b_store/services/database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,17 +12,131 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  
+  Stream? productsStream;
+
+  void getontheload() {
+    productsStream = DatabaseMethods().getAllProducts();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getontheload();
+    super.initState();
+  }
+
+  Widget allProduct() {
+    return StreamBuilder(
+      stream: productsStream,
+      builder: (context, AsyncSnapshot snapshot) {
+        if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.data.docs.isEmpty) {
+          return const Center(
+            child: Text(
+              "No products available yet.",
+              style: TextStyle(color: Colors.black54, fontSize: 16),
+            ),
+          );
+        }
+
+        return ListView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: snapshot.data.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot ds = snapshot.data.docs[index];
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailPage(
+                      image: ds["Image"] ?? "",
+                      name: ds["Name"] ?? "Product Name",
+                      price: "\$${ds["Price"] ?? "0"}",
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 15.0),
+                width: 160,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: ds["Image"] != null && ds["Image"] != ""
+                          ? Image.network(
+                              ds["Image"],
+                              height: 150,
+                              width: 160,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Center(child: Icon(Icons.broken_image, size: 50)),
+                            )
+                          : const Center(child: Icon(Icons.image, size: 50)),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              ds["Name"] ?? "Unknown",
+                              style: AppWidget.boldTextstyle(16, Colors.white),
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              "\$${ds["Price"] ?? "0"}",
+                              style: AppWidget.boldTextstyle(14, Colors.white70),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          margin: EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
+          margin: const EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Location",
                 style: TextStyle(
                   color: Colors.black,
@@ -28,10 +144,10 @@ class _HomeState extends State<Home> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 5.0),
+              const SizedBox(height: 5.0),
               Row(
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.location_on,
                     color: Color.fromARGB(255, 14, 13, 0),
                   ),
@@ -41,15 +157,15 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Container(
-                padding: EdgeInsets.only(left: 20.0),
-                margin: EdgeInsets.only(right: 20.0),
+                padding: const EdgeInsets.only(left: 20.0),
+                margin: const EdgeInsets.only(right: 20.0),
                 decoration: BoxDecoration(
-                  color: Color(0xFFeceef0),
+                  color: const Color(0xFFeceef0),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: TextField(
+                child: const TextField(
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search items",
@@ -62,9 +178,9 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Container(
-                margin: EdgeInsets.only(right: 20.0),
+                margin: const EdgeInsets.only(right: 20.0),
                 child: Stack(
                   children: [
                     ClipRRect(
@@ -80,15 +196,15 @@ class _HomeState extends State<Home> {
                       bottom: 20,
                       left: 20,
                       child: Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 20,
                           vertical: 10,
                         ),
                         decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 116, 95, 82),
+                          color: const Color.fromARGB(255, 116, 95, 82),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: Text(
+                        child: const Text(
                           "Shop Now",
                           style: TextStyle(
                             color: Colors.white,
@@ -101,12 +217,12 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Text(
                 "Category",
                 style: AppWidget.boldTextstyle(22, Colors.black),
               ),
-              SizedBox(height: 15.0),
+              const SizedBox(height: 15.0),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -119,158 +235,15 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               Text(
                 "Flash Sales",
                 style: AppWidget.boldTextstyle(22, Colors.black),
               ),
-              SizedBox(height: 15.0),
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailPage(
-                            image: "image/black-man-brown-jacket-pink-background-studio-shot.jpg",
-                            name: "T-Shirt",
-                            price: "\$100",
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              "image/black-man-brown-jacket-pink-background-studio-shot.jpg",
-                              height: 150,
-                              width: 160,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(Icons.image, size: 100),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.7),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "T-Shirt",
-                                    style: AppWidget.boldTextstyle(
-                                      18,
-                                      Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "\$100",
-                                    style: AppWidget.boldTextstyle(
-                                      16,
-                                      Colors.white70,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 20.0),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailPage(
-                            image: "image/black-man-city.jpg",
-                            name: "Men-Shirt",
-                            price: "\$300",
-                          ),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Image.asset(
-                              "image/black-man-city.jpg",
-                              height: 150,
-                              width: 160,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(Icons.image, size: 100),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.7),
-                                borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "Men-Shirt",
-                                    style: AppWidget.boldTextstyle(
-                                      18,
-                                      Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    "\$300",
-                                    style: AppWidget.boldTextstyle(
-                                      16,
-                                      Colors.white70,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 15.0),
+              SizedBox(
+                height: 160,
+                child: allProduct(),
               ),
             ],
           ),

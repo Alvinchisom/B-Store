@@ -1,10 +1,6 @@
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
 import 'package:b_store/services/database.dart';
 import 'package:b_store/widget/support_widget.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:random_string/random_string.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({super.key});
@@ -24,35 +20,50 @@ class _AddProductState extends State<AddProduct> {
   String? value;
 
   Future<void> uploadItem() async {
-    if (productnamecontroller.text != "" &&
-        productpricecontroller.text != "" &&
-        productdetailcontroller.text != "" &&
-        productimagecontroller.text != "") {
+    if (productnamecontroller.text.isNotEmpty &&
+        productpricecontroller.text.isNotEmpty &&
+        productdetailcontroller.text.isNotEmpty &&
+        productimagecontroller.text.isNotEmpty &&
+        value != null) {
+        
       setState(() {
         isLoading = true;
       });
 
       Map<String, dynamic> addProduct = {
-        "Image": productimagecontroller.text,
-        "Name": productnamecontroller.text,
-        "Price": productpricecontroller.text,
-        "Detail": productdetailcontroller.text,
+        "Image": productimagecontroller.text.trim(),
+        "Name": productnamecontroller.text.trim(),
+        "Price": productpricecontroller.text.trim(),
+        "Detail": productdetailcontroller.text.trim(),
       };
-      await DatabaseMethods().addProductDetails(addProduct, value!).then((value) {
+      
+      await DatabaseMethods().addProductDetails(addProduct, value!).then((val) {
         productnamecontroller.text = "";
         productpricecontroller.text = "";
         productdetailcontroller.text = "";
         productimagecontroller.text = "";
+        value = null;
+        
         setState(() {
           isLoading = false;
         });
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.green,
-            content: Text(
-              "Product has been added Successfully",
-              style: TextStyle(fontSize: 20.0),
-            )));
+        
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            "Product has been added Successfully",
+            style: TextStyle(fontSize: 20.0),
+          ),
+        ));
       });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.redAccent,
+        content: Text(
+          "Please fill all fields and choose a category",
+          style: TextStyle(fontSize: 16.0),
+        ),
+      ));
     }
   }
 
@@ -65,7 +76,7 @@ class _AddProductState extends State<AddProduct> {
           children: [
             Container(
               height: 150,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 116, 95, 82),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(80),
@@ -75,17 +86,17 @@ class _AddProductState extends State<AddProduct> {
               child: Row(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 50, left: 20),
+                    margin: const EdgeInsets.only(top: 50, left: 20),
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(115, 237, 235, 235),
+                      color: const Color.fromARGB(115, 237, 235, 235),
                       borderRadius: BorderRadius.circular(40),
                     ),
-                    child: Icon(Icons.arrow_back, color: Colors.white),
+                    child: const Icon(Icons.arrow_back, color: Colors.white),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 50, left: 10),
+                    margin: const EdgeInsets.only(top: 50, left: 10),
                     child: Text(
                       "Add Product",
                       style: AppWidget.boldTextstyle(20, Colors.white),
@@ -94,7 +105,7 @@ class _AddProductState extends State<AddProduct> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             productimagecontroller.text == ""
                 ? Center(
                     child: Container(
@@ -104,7 +115,7 @@ class _AddProductState extends State<AddProduct> {
                         border: Border.all(color: Colors.black, width: 1.5),
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Icon(Icons.camera_alt_outlined),
+                      child: const Icon(Icons.camera_alt_outlined),
                     ),
                   )
                 : Center(
@@ -124,14 +135,14 @@ class _AddProductState extends State<AddProduct> {
                             productimagecontroller.text,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
-                              return Center(child: Icon(Icons.error_outline));
+                              return const Center(child: Icon(Icons.error_outline));
                             },
                           ),
                         ),
                       ),
                     ),
                   ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
@@ -139,12 +150,12 @@ class _AddProductState extends State<AddProduct> {
                 style: AppWidget.boldTextstyle(20, Colors.black),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              margin: EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
+                border: Border.all(color: const Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
@@ -159,7 +170,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
@@ -167,12 +178,12 @@ class _AddProductState extends State<AddProduct> {
                 style: AppWidget.boldTextstyle(20, Colors.black),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.only(left: 20),
-              margin: EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
+                border: Border.all(color: const Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
@@ -184,7 +195,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
@@ -192,12 +203,12 @@ class _AddProductState extends State<AddProduct> {
                 style: AppWidget.boldTextstyle(20, Colors.black),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.only(left: 20),
-              margin: EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
+                border: Border.all(color: const Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(
@@ -209,7 +220,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
@@ -217,12 +228,12 @@ class _AddProductState extends State<AddProduct> {
                 style: AppWidget.boldTextstyle(20, Colors.black),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              margin: EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              margin: const EdgeInsets.only(left: 20.0, right: 20.0),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
+                border: Border.all(color: const Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: DropdownButtonHideUnderline(
@@ -233,10 +244,7 @@ class _AddProductState extends State<AddProduct> {
                           value: item,
                           child: Text(
                             item,
-                            style: AppWidget.semiBoldTextstyle(
-                              16,
-                              Colors.black,
-                            ),
+                            style: AppWidget.semiBoldTextstyle(16, Colors.black),
                           ),
                         ),
                       )
@@ -250,13 +258,13 @@ class _AddProductState extends State<AddProduct> {
                     style: AppWidget.lightTextstyle(16, Colors.grey),
                   ),
                   iconSize: 36,
-                  icon: Icon(Icons.arrow_drop_down, color: Colors.black),
+                  icon: const Icon(Icons.arrow_drop_down, color: Colors.black),
                   value: value,
                   isExpanded: true,
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
@@ -264,12 +272,12 @@ class _AddProductState extends State<AddProduct> {
                 style: AppWidget.boldTextstyle(20, Colors.black),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Container(
-              padding: EdgeInsets.only(left: 20),
-              margin: EdgeInsets.only(left: 20, right: 20),
+              padding: const EdgeInsets.only(left: 20),
+              margin: const EdgeInsets.only(left: 20, right: 20),
               decoration: BoxDecoration(
-                border: Border.all(color: Color.fromARGB(255, 116, 95, 82)),
+                border: Border.all(color: const Color.fromARGB(255, 116, 95, 82)),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
@@ -282,7 +290,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Center(
               child: GestureDetector(
                 onTap: () {
@@ -290,14 +298,13 @@ class _AddProductState extends State<AddProduct> {
                 },
                 child: Container(
                   width: 200,
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  margin: EdgeInsets.only(left: 100, right: 100),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: Color.fromARGB(255, 116, 95, 82),
+                    color: const Color.fromARGB(255, 116, 95, 82),
                   ),
                   child: isLoading
-                      ? Center(
+                      ? const Center(
                           child: CircularProgressIndicator(
                             color: Colors.white,
                           ),
@@ -310,7 +317,7 @@ class _AddProductState extends State<AddProduct> {
                 ),
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
           ],
         ),
       ),
