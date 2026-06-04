@@ -1,6 +1,7 @@
 import 'package:b_store/pages/Order.dart';
 import 'package:b_store/pages/Profile.dart';
 import 'package:b_store/pages/home.dart';
+import 'package:b_store/pages/wallet.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +18,7 @@ class _BottomNavState extends State<BottomNav> {
   late List<Widget> pages;
   late Home homepage;
   late Order order;
+  late Wallet wallet;
   late Profile profile;
   late Widget currentPage;
 
@@ -24,8 +26,9 @@ class _BottomNavState extends State<BottomNav> {
   void initState() {
     homepage = Home();
     order = Order();
+    wallet = Wallet();
     profile = Profile();
-    pages = [homepage, order, profile];
+    pages = [homepage, order, wallet, profile];
     super.initState();
   }
 
@@ -49,6 +52,10 @@ class _BottomNavState extends State<BottomNav> {
             ),
             Icon(
               Icons.shopping_bag_outlined,
+              color: Colors.white,
+            ),
+            Icon(
+              Icons.wallet_outlined,
               color: Colors.white,
             ),
             Icon(

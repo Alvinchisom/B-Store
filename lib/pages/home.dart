@@ -59,6 +59,7 @@ class _HomeState extends State<Home> {
                       image: ds["Image"] ?? "",
                       name: ds["Name"] ?? "Product Name",
                       price: "\$${ds["Price"] ?? "0"}",
+                      detail: ds["Detail"] ?? "",
                     ),
                   ),
                 );
@@ -81,7 +82,9 @@ class _HomeState extends State<Home> {
                               width: 160,
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) =>
-                                  const Center(child: Icon(Icons.broken_image, size: 50)),
+                                  const Center(
+                                    child: Icon(Icons.broken_image, size: 50),
+                                  ),
                             )
                           : const Center(child: Icon(Icons.image, size: 50)),
                     ),
@@ -110,10 +113,29 @@ class _HomeState extends State<Home> {
                             ),
                             Text(
                               "\$${ds["Price"] ?? "0"}",
-                              style: AppWidget.boldTextstyle(14, Colors.white70),
+                              style: AppWidget.boldTextstyle(
+                                14,
+                                Colors.white70,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: 10,
+                      right: 10,
+                      child: Container(
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.8),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.black,
+                          size: 14,
                         ),
                       ),
                     ),
@@ -241,10 +263,7 @@ class _HomeState extends State<Home> {
                 style: AppWidget.boldTextstyle(22, Colors.black),
               ),
               const SizedBox(height: 15.0),
-              SizedBox(
-                height: 160,
-                child: allProduct(),
-              ),
+              SizedBox(height: 160, child: allProduct()),
             ],
           ),
         ),

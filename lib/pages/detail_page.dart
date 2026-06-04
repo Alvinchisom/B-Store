@@ -3,12 +3,13 @@ import 'package:b_store/widget/support_widget.dart';
 import 'package:b_store/pages/home.dart';
 
 class DetailPage extends StatefulWidget {
-  final String image, name, price;
+  final String image, name, price, detail;
   const DetailPage({
     super.key,
     required this.image,
     required this.name,
     required this.price,
+    required this.detail,
   });
 
   @override
@@ -30,21 +31,33 @@ class _DetailPageState extends State<DetailPage> {
             children: [
               Stack(
                 children: [
-                  Image.asset(
-                    widget.image,
-                    height: MediaQuery.of(context).size.height / 1.5,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                  ),
+                  widget.image.isNotEmpty
+                      ? Image.network(
+                          widget.image,
+                          height: MediaQuery.of(context).size.height / 1.5,
+                          width: MediaQuery.of(context).size.width,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height / 1.5,
+                                width: MediaQuery.of(context).size.width,
+                                color: Colors.grey[200],
+                                child: const Icon(Icons.broken_image, size: 50),
+                              ),
+                        )
+                      : Container(
+                          height: MediaQuery.of(context).size.height / 1.5,
+                          width: MediaQuery.of(context).size.width,
+                          color: Colors.grey[200],
+                          child: const Icon(Icons.image, size: 50),
+                        ),
                   Positioned(
                     top: 50,
                     left: 20,
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Home()),
-                        );
+                        Navigator.pop(context);
                       },
                       child: Container(
                         padding: EdgeInsets.all(10),
@@ -98,7 +111,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     SizedBox(height: 10.0),
                     Text(
-                      "This is a premium product made with high-quality materials. It features a modern design that is perfect for any occasion. Comfortable, stylish, and durable.",
+                      widget.detail,
                       style: TextStyle(
                         color: Colors.black54,
                         fontSize: 16,
