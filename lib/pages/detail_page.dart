@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:b_store/widget/support_widget.dart';
-import 'package:b_store/pages/home.dart';
 
 class DetailPage extends StatefulWidget {
   final String image, name, price, detail;
