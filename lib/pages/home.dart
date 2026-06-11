@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:b_store/widget/support_widget.dart';
 import 'package:b_store/pages/detail_page.dart';
+import 'package:b_store/pages/category.dart';
 import 'package:b_store/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,6 +14,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Stream? productsStream;
+  String searchQuery = "";
 
   void getontheload() {
     productsStream = DatabaseMethods().getAllProducts();
@@ -33,11 +35,18 @@ class _HomeState extends State<Home> {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (snapshot.data.docs.isEmpty) {
-          return const Center(
+        List<DocumentSnapshot> filterDocs = snapshot.data.docs.where((element) {
+          String name = (element["Name"] ?? "").toLowerCase();
+          return name.contains(searchQuery);
+        }).toList();
+
+        if (filterDocs.isEmpty) {
+          return Center(
             child: Text(
-              "No products available yet.",
-              style: TextStyle(color: Colors.black54, fontSize: 16),
+              searchQuery.isEmpty 
+                  ? "No products available yet." 
+                  : "No products found for '$searchQuery'.",
+              style: const TextStyle(color: Colors.black54, fontSize: 16),
             ),
           );
         }
@@ -46,9 +55,9 @@ class _HomeState extends State<Home> {
           padding: EdgeInsets.zero,
           shrinkWrap: true,
           scrollDirection: Axis.horizontal,
-          itemCount: snapshot.data.docs.length,
+          itemCount: filterDocs.length,
           itemBuilder: (context, index) {
-            DocumentSnapshot ds = snapshot.data.docs[index];
+            DocumentSnapshot ds = filterDocs[index];
 
             return GestureDetector(
               onTap: () {
@@ -187,8 +196,13 @@ class _HomeState extends State<Home> {
                   color: const Color(0xFFeceef0),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const TextField(
-                  decoration: InputDecoration(
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value.toLowerCase();
+                    });
+                  },
+                  decoration: const InputDecoration(
                     border: InputBorder.none,
                     hintText: "Search items",
                     hintStyle: TextStyle(
@@ -249,11 +263,36 @@ class _HomeState extends State<Home> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    AppWidget.categoryItem("image/tshirt_new.png", "T-Shirt"),
-                    AppWidget.categoryItem("image/shoes.png", "Shoes"),
-                    AppWidget.categoryItem("image/jacket.png", "Jacket"),
-                    AppWidget.categoryItem("image/jeans.png", "Jeans"),
-                    AppWidget.categoryItem("image/dress.png", "Dress"),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Category(category: "T-Shirt")));
+                      },
+                      child: AppWidget.categoryItem("image/tshirt_new.png", "T-Shirt"),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Category(category: "Shoes")));
+                      },
+                      child: AppWidget.categoryItem("image/shoes.png", "Shoes"),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Category(category: "Jacket")));
+                      },
+                      child: AppWidget.categoryItem("image/jacket.png", "Jacket"),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Category(category: "Jeans")));
+                      },
+                      child: AppWidget.categoryItem("image/jeans.png", "Jeans"),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const Category(category: "Dress")));
+                      },
+                      child: AppWidget.categoryItem("image/dress.png", "Dress"),
+                    ),
                   ],
                 ),
               ),

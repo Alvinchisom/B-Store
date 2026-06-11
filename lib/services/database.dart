@@ -21,4 +21,11 @@ class DatabaseMethods {
   Stream<QuerySnapshot> getAllProducts() {
     return FirebaseFirestore.instance.collection("Products").snapshots();
   }
+
+  Stream<QuerySnapshot> getProductsByCategory(String category) {
+    return FirebaseFirestore.instance
+        .collection("Products")
+        .where("Category", isEqualTo: category)
+        .snapshots();
+  }
 }
